@@ -1,7 +1,10 @@
 package com.lambdaschool.javaorders.models;
 
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "agents")
@@ -9,6 +12,7 @@ import javax.persistence.*;
 public class Agent {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable = false)
   private long agentcode;
 
   private String agentname;
@@ -17,11 +21,21 @@ public class Agent {
   private String phone;
   private String country;
 
+  //connect agent to customers (one agent - many customers)
+  @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Customer> customers = new ArrayList<>();
+
+  //connect agents to payments
+  @ManyToMany
+  @JoinTable(name = "orderspayments",
+      joinColumns = @JoinColumn(name = "agentcode"),
+      inverseJoinColumns = @JoinColumn(name = "paymentid"))
+  private Set<Payment> payments = new HashSet<>();
+
   public Agent() {
   }
 
-  public Agent(long agentcode, String agentname, String workingarea, double commission, String phone, String country) {
-    this.agentcode = agentcode;
+  public Agent( String agentname, String workingarea, double commission, String phone, String country) {
     this.agentname = agentname;
     this.workingarea = workingarea;
     this.commission = commission;
@@ -76,4 +90,21 @@ public class Agent {
   public void setCountry(String country) {
     this.country = country;
   }
+
+  public List<Customer> getCustomers() {
+    return customers;
+  }
+
+  public void setCustomers(List<Customer> customers) {
+    this.customers = customers;
+  }
+
+  public Set<Payment> getPayments() {
+    return payments;
+  }
+
+  public void setPayments(Set<Payment> payments) {
+    this.payments = payments;
+  }
+
 }
