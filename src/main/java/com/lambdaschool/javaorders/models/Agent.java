@@ -21,16 +21,9 @@ public class Agent {
   private String phone;
   private String country;
 
-  //connect agent to customers (one agent - many customers)
   @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Customer> customers = new ArrayList<>();
 
-  //connect agents to payments
-  @ManyToMany
-  @JoinTable(name = "orderspayments",
-      joinColumns = @JoinColumn(name = "agentcode"),
-      inverseJoinColumns = @JoinColumn(name = "paymentid"))
-  private Set<Payment> payments = new HashSet<>();
 
   public Agent() {
   }
@@ -99,12 +92,5 @@ public class Agent {
     this.customers = customers;
   }
 
-  public Set<Payment> getPayments() {
-    return payments;
-  }
-
-  public void setPayments(Set<Payment> payments) {
-    this.payments = payments;
-  }
 
 }

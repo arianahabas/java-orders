@@ -13,12 +13,11 @@ public class Payment {
   @Column(nullable = false)
   private long paymentid;
 
-  @Column(nullable = false)
+  @Column(unique = true, nullable = false)
   private String type;
 
-  //connect payments to customer (already setup inside of Agent)
   @ManyToMany(mappedBy = "payments")
-  private Set<Agent> agents = new HashSet<>();
+  private Set<Order> orders = new HashSet<>();
 
   public Payment() {
   }
@@ -43,12 +42,11 @@ public class Payment {
     this.type = type;
   }
 
-  public Set<Agent> getAgents() {
-    return agents;
+  public Set<Order> getOrders() {
+    return orders;
   }
 
-  public void setAgents(Set<Agent> agents) {
-    this.agents = agents;
+  public void setOrders(Set<Order> orders) {
+    this.orders = orders;
   }
-
 }
